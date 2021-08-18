@@ -77,12 +77,29 @@ void dijkstra(TGraphL G, int s)
 				SiftUp(h, v, u->d + get_edge(G,u->v,v));
 			}
 		}
-	}
+	} 
 }
 
 void Prim(TGraphL G)
 {
-    
+	int parent[G.nn];
+	MinHeap* h = newQueue(G.nn);
+	for(int i=0; i<G.nn; i++) {
+		insert(h, i, INT_MAX/3);
+	}
+	
+	SiftUp(h, 0, 0);
+	while(!isEmpty(h)) {
+		MinHeapNode* u = removeMin(h);
+		for(int v = 0; v < G.nn; v++) {
+			if(isInMinHeap(h, v) && get_dist(h, v) > get_edge(G,u->v,v)) {
+				SiftUp(h, v, get_edge(G,u->v,v));
+				parent[v] = u->v;
+			}
+		}
+	}
+	for(int i = 1; i < G.nn; i++)
+		printf("parent: %d ---> v %d\n", parent[i], i);
 }
 
 int main()
